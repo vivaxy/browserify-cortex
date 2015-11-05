@@ -82,26 +82,13 @@ var getDependencies = function (dependencies) {
                             return reset(repo, commit, 3);
                         })
                         .then(function () { // done
-                            tree[name].done = true;
-                            if (checkDone()) {
-                                buildBundle();
-                            }
-                            try {
-                                var cortexDependencies = {};
-                                try {
-                                    var newCortexJson = require(path.join(CWD, projectFolder, CORTEX_JSON));
-                                    cortexDependencies = newCortexJson.dependencies;
-                                } catch (e) {
-                                    var newPackageJson = require(path.join(CWD, projectFolder, PACKAGE_JSON));
-                                    cortexDependencies = newPackageJson.cortex && newPackageJson.cortex.dependencies || {};
-                                }
-                                getDependencies(cortexDependencies);
-                            } catch (e) {
-
-                            }
+                            next(name, projectFolder);
                         })
                         .catch(function (e) {
-                            console.log(e);
+                            if (~e.message.indexOf('Object not found')) {
+                                next(name, projectFolder);
+                            }
+                            console.log('git error: ' + e.message);
                         });
                     //exec('git clone ' + newDependent.repository + ' ' + projectFolder, function (error, stdout, stderr) {
                     //    if (error) {
@@ -113,12 +100,31 @@ var getDependencies = function (dependencies) {
                     //            console.log(_error);
                     //        }
                     //        //console.log(name, _error, _stdout, _stderr);
-                    //        
                     //    });
                     //});
                 }
             });
         }
+    }
+};
+
+var next = function (name, projectFolder) {
+    tree[name].done = true;
+    if (checkDone()) {
+        buildBundle();
+    }
+    try {
+        var cortexDependencies = {};
+        try {
+            var newCortexJson = require(path.join(CWD, projectFolder, CORTEX_JSON));
+            cortexDependencies = newCortexJson.dependencies;
+        } catch (e) {
+            var newPackageJson = require(path.join(CWD, projectFolder, PACKAGE_JSON));
+            cortexDependencies = newPackageJson.cortex && newPackageJson.cortex.dependencies || {};
+        }
+        getDependencies(cortexDependencies);
+    } catch (e) {
+
     }
 };
 
