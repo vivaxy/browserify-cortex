@@ -4,31 +4,31 @@
  * @author vivaxy
  */
 'use strict';
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
-var git = require('nodegit');
-var browserify = require('browserify');
-var request = require('request');
-var semver = require('semver');
+const git = require('nodegit');
+const browserify = require('browserify');
+const request = require('request');
+const semver = require('semver');
 
-var CWD = process.cwd();
-var b = browserify();
-var clone = git.Clone.clone;
-var reset = git.Reset.reset;
+const CWD = process.cwd();
+const browserifyInstance = browserify();
+const clone = git.Clone.clone;
+const reset = git.Reset.reset;
 
-var tree = {};
-var CORTEX_JSON = 'cortex.json';
-var PACKAGE_JSON = 'package.json';
-var WORKING_DIRECTORY = 'browserify-cortex';
-var OUTPUT_FILE_NAME = 'cortex-bundle.js';
-var REGISTRY_SERVER = 'http://registry.cortexjs.dp/';
+let tree = {};
+const CORTEX_JSON = 'cortex.json';
+const PACKAGE_JSON = 'package.json';
+const WORKING_DIRECTORY = 'browserify-cortex';
+const OUTPUT_FILE_NAME = 'bundle.js';
+const REGISTRY_SERVER = 'http://registry.cortexjs.dp/';
 
-var cortexJson = require(path.join(CWD, CORTEX_JSON));
+const cortexJson = require(path.join(CWD, CORTEX_JSON));
 
-var checkDone = function () {
-    var count = 0;
-    for (var dep in tree) {
+const checkDone = () => {
+    let count = 0;
+    for (let dep in tree) {
         count++;
         if (tree[dep].done) {
             count--;
@@ -37,23 +37,23 @@ var checkDone = function () {
     return count === 0;
 };
 
-var getDependencies = function (dependencies) {
-    for (var dep in dependencies) {
+const getDependencies = dependencies => {
+    for (let dep in dependencies) {
         if (!tree[dep]) {
-            var registry = REGISTRY_SERVER + dep;
+            let registry = REGISTRY_SERVER + dep;
             tree[dep] = {};
             console.log('resolving dependencies: ' + dep);
-            request(registry, function (error, response, body) {
+            request(registry, (error, response, body)=> {
                 if (!error && response.statusCode === 200) {
-                    var registryResult = JSON.parse(body);
-                    var name = registryResult.name;
-                    var versions = registryResult.versions;
-                    var newDependent = {};
-                    for (var version in versions) {
+                    let registryResult = JSON.parse(body);
+                    let name = registryResult.name;
+                    let versions = registryResult.versions;
+                    let newDependent = {};
+                    for (let version in versions) {
                         if (semver.satisfies(version, dependencies[name])) {
-                            var versionJson = versions[version];
+                            let versionJson = versions[version];
                             //console.log(name, versionJson.repository.url);
-                            var repositoryUrl = registryResult.repository.url || registryResult.repository.events || '';
+                            let repositoryUrl = registryResult.repository.url || registryResult.repository.events || '';
                             if (repositoryUrl.indexOf('github')) {
                                 repositoryUrl = versionJson.repository.url || versionJson.repository.events || repositoryUrl;
                             }
@@ -62,29 +62,29 @@ var getDependencies = function (dependencies) {
                                 name: name,
                                 version: version,
                                 gitHead: versionJson.gitHead,
-                                repository: repositoryUrl.replace('git://', 'http://'),
+                                repository: repositoryUrl.replace('git://', 'http://').replace('git@github.com:', 'https://github.com/'),
                                 main: versionJson.main
                             };
                         }
                     }
                     // end of new dependent
                     tree[name] = newDependent;
-                    var projectFolder = path.join(WORKING_DIRECTORY, name);
+                    let projectFolder = path.join(WORKING_DIRECTORY, name);
                     console.log('cloning: ' + name + ' from ' + newDependent.repository);
-                    var repo;
+                    let repo;
                     clone(newDependent.repository, projectFolder)
-                        .then(function (_repo) {
+                        .then(_repo=> {
                             repo = _repo;
                             return _repo.getCommit(newDependent.gitHead);
                         })
-                        .then(function (commit) {
+                        .then(commit=> {
                             // 3 for HARD
                             return reset(repo, commit, 3);
                         })
-                        .then(function () { // done
+                        .then(() => { // done
                             next(name, projectFolder);
                         })
-                        .catch(function (e) {
+                        .catch(e => {
                             if (~e.message.indexOf('Object not found')) {
                                 next(name, projectFolder);
                             }
@@ -108,18 +108,18 @@ var getDependencies = function (dependencies) {
     }
 };
 
-var next = function (name, projectFolder) {
+const next = (name, projectFolder)  => {
     tree[name].done = true;
     if (checkDone()) {
         buildBundle();
     }
     try {
-        var cortexDependencies = {};
+        let cortexDependencies = {};
         try {
-            var newCortexJson = require(path.join(CWD, projectFolder, CORTEX_JSON));
+            let newCortexJson = require(path.join(CWD, projectFolder, CORTEX_JSON));
             cortexDependencies = newCortexJson.dependencies;
         } catch (e) {
-            var newPackageJson = require(path.join(CWD, projectFolder, PACKAGE_JSON));
+            let newPackageJson = require(path.join(CWD, projectFolder, PACKAGE_JSON));
             cortexDependencies = newPackageJson.cortex && newPackageJson.cortex.dependencies || {};
         }
         getDependencies(cortexDependencies);
@@ -128,19 +128,20 @@ var next = function (name, projectFolder) {
     }
 };
 
-var buildBundle = function () {
+const buildBundle = ()  => {
 
-    b.add(cortexJson.main);
+    // cortex main as entry
+    browserifyInstance.add(cortexJson.main);
 
-    for (var dep in tree) {
+    for (let dep in tree) {
         //console.log(dep, tree[dep]);
-        console.log(dep, ' as ', path.join(CWD, WORKING_DIRECTORY, dep, tree[dep].main));
-        b.require(path.join(CWD, WORKING_DIRECTORY, dep, tree[dep].main), {
+        console.log(dep, 'as', path.join(CWD, WORKING_DIRECTORY, dep, tree[dep].main));
+        browserifyInstance.require(path.join(CWD, WORKING_DIRECTORY, dep, tree[dep].main), {
             expose: dep
         });
     }
 
-    b.bundle(function (err, data) {
+    browserifyInstance.bundle((err, data) => {
         if (err) {
             console.log(err.message);
         } else {
