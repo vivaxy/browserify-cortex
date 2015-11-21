@@ -17,7 +17,6 @@ const browserifyInstance = browserify();
 const clone = git.Clone.clone;
 const reset = git.Reset.reset;
 
-let tree = {};
 const CORTEX_JSON = 'cortex.json';
 const PACKAGE_JSON = 'package.json';
 const WORKING_DIRECTORY = 'browserify-cortex';
@@ -25,6 +24,8 @@ const OUTPUT_FILE_NAME = 'bundle.js';
 const REGISTRY_SERVER = 'http://registry.cortexjs.dp/';
 
 const cortexJson = require(path.join(CWD, CORTEX_JSON));
+
+let tree = {};
 
 const checkDone = () => {
     let count = 0;
@@ -90,18 +91,6 @@ const getDependencies = dependencies => {
                             }
                             console.log('git error: ' + e.message);
                         });
-                    //exec('git clone ' + newDependent.repository + ' ' + projectFolder, function (error, stdout, stderr) {
-                    //    if (error) {
-                    //        console.log(error);
-                    //    }
-                    //    //console.log(name, error, stdout, stderr);
-                    //    exec('cd ' + projectFolder + ' && git reset --hard ' + newDependent.gitHead, function (_error, _stdout, _stderr) {
-                    //        if (_error) {
-                    //            console.log(_error);
-                    //        }
-                    //        //console.log(name, _error, _stdout, _stderr);
-                    //    });
-                    //});
                 }
             });
         }
