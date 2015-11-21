@@ -1,6 +1,6 @@
 {
   "name": "browserify-cortex",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "bundle cortex project by browserify",
   "bin": {
     "browserify-cortex": "./index.js"
