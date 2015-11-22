@@ -179,6 +179,8 @@ const buildBundle = () => {
 
 };
 
+log.setLevel(2);
+
 usageTracker
     .initialize({
         owner: 'vivaxy',
