@@ -101,7 +101,10 @@ const getDependencies = dependencies => {
                     // end of new dependent
                     tree[name] = newDependent;
                     let projectFolder = path.join(WORKING_DIRECTORY, name);
-                    log.info('cloning:', name, 'from', newDependent.repository);
+                    if (path.sep === '\\') {
+                        projectFolder.replace('\\', '/');
+                    }
+                    log.info('cloning:', name, 'from', newDependent.repository, 'to', projectFolder);
                     let repo;
                     clone(newDependent.repository, projectFolder)
                         .then(_repo => {
