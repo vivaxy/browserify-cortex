@@ -15,7 +15,8 @@ const browserify = require('browserify');
 const usageTracker = require('usage-tracker');
 
 const packageJson = require('./package.json');
-const findRepository = require('./lib/repository.js');
+const findRepository = require('./fallback/repository.js');
+const findRepositoryUrl = require('./fallback/repository-url.js');
 
 const cwd = process.cwd();
 const browserifyInstance = browserify();
@@ -75,7 +76,11 @@ const getDependencies = dependencies => {
                                     'registry not found': name
                                 });
                             }
-                            let repositoryUrl = registryResult.repository.url || registryResult.repository.events;
+                            let repositoryUrl = repository.url || repository.events;
+                            // fallback
+                            if (repositoryUrl == undefined) {
+                                repositoryUrl = findRepositoryUrl[name];
+                            }
                             if (repositoryUrl === undefined) {
                                 log.error('repository url not found:', name);
                                 usageTracker.send({

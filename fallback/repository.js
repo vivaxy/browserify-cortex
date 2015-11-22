@@ -3,6 +3,7 @@
  * @author vivaxy
  */
 'use strict';
+
 module.exports = {
     'mbox': {
         'url': 'http://code.dianpingoa.com/neurons/mbox.git'
