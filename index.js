@@ -10,6 +10,7 @@ const path = require('path');
 const git = require('nodegit');
 const semver = require('semver');
 const request = require('request');
+const log = require('log-util');
 const browserify = require('browserify');
 const usageTracker = require('usage-tracker');
 
@@ -49,7 +50,7 @@ const getDependencies = dependencies => {
         if (!tree[dep]) {
             let registry = REGISTRY_SERVER + dep;
             tree[dep] = {};
-            console.log('resolving dependencies:', dep);
+            log.info('resolving dependencies:', dep);
             request(registry, (error, response, body) => {
                 if (!error && response.statusCode === 200) {
                     let registryResult = JSON.parse(body);
@@ -69,14 +70,14 @@ const getDependencies = dependencies => {
                                 repository = findRepository[name];
                             }
                             if (repository === undefined) {
-                                console.log('registry not found:', name);
+                                log.error('registry not found:', name);
                                 usageTracker.send({
                                     'registry not found': name
                                 });
                             }
                             let repositoryUrl = registryResult.repository.url || registryResult.repository.events;
                             if (repositoryUrl === undefined) {
-                                console.log('repository url not found:', name);
+                                log.error('repository url not found:', name);
                                 usageTracker.send({
                                     'repository url not found': name
                                 });
@@ -95,7 +96,7 @@ const getDependencies = dependencies => {
                     // end of new dependent
                     tree[name] = newDependent;
                     let projectFolder = path.join(WORKING_DIRECTORY, name);
-                    console.log('cloning:', name, 'from', newDependent.repository);
+                    log.info('cloning:', name, 'from', newDependent.repository);
                     let repo;
                     clone(newDependent.repository, projectFolder)
                         .then(_repo => {
@@ -113,7 +114,10 @@ const getDependencies = dependencies => {
                             if (~e.message.indexOf('Object not found')) {
                                 next(name, projectFolder);
                             }
-                            console.log('git error:', e.message);
+                            log.error('git error:', e.message);
+                            usageTracker.send({
+                                'git error': e.message
+                            });
                         });
                 }
             });
@@ -147,8 +151,8 @@ const buildBundle = () => {
     browserifyInstance.add(cortexJson.main);
 
     for (let dep in tree) {
-        //console.log(dep, tree[dep]);
-        console.log(dep, 'as', path.join(cwd, WORKING_DIRECTORY, dep, tree[dep].main));
+        // log.debug(dep, tree[dep]);
+        log.info(dep, 'as', path.join(cwd, WORKING_DIRECTORY, dep, tree[dep].main));
         browserifyInstance.require(path.join(cwd, WORKING_DIRECTORY, dep, tree[dep].main), {
             expose: dep
         });
@@ -156,7 +160,10 @@ const buildBundle = () => {
 
     browserifyInstance.bundle((err, data) => {
         if (err) {
-            console.log(err.message);
+            log.error('browserify bundle error:', err.message);
+            usageTracker.send({
+                'browserify bundle error': err.message
+            });
         } else {
             fs.writeFile(path.join(cwd, WORKING_DIRECTORY, OUTPUT_FILE_NAME), data);
         }
