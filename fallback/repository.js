@@ -67,5 +67,8 @@ module.exports = {
     },
     'json': {
         url: 'http://code.dianpingoa.com/neurons/json.git'
+    },
+    'swfupload': {
+        url: 'http://code.dianpingoa.com/neurons/swfupload.git'
     }
 };
