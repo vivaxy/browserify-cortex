@@ -64,5 +64,8 @@ module.exports = {
     },
     'fx': {
         url: 'http://code.dianpingoa.com/neurons/fx.git'
+    },
+    'json': {
+        url: 'http://code.dianpingoa.com/neurons/json.git'
     }
 };
