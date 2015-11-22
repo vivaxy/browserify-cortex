@@ -19,5 +19,44 @@ module.exports = {
     },
     'hexrgb': {
         url: 'http://code.dianpingoa.com/neurons/hexrgb.git'
+    },
+    'request': {
+        url: 'http://code.dianpingoa.com/neurons/request.git'
+    },
+    'lang': {
+        url: 'http://code.dianpingoa.com/neurons/lang.git'
+    },
+    'jquery': {
+        url: 'http://code.dianpingoa.com/neurons/jquery.git'
+    },
+    'tpl': {
+        url: 'http://code.dianpingoa.com/neurons/tpl.git'
+    },
+    'util': {
+        url: 'http://code.dianpingoa.com/neurons/browser-util.git'
+    },
+    'chartjs': {
+        url: 'http://code.dianpingoa.com/neurons/chartjs.git'
+    },
+    'moment': {
+        url: 'http://code.dianpingoa.com/neurons/moment-js.git'
+    },
+    'switch': {
+        url: 'http://code.dianpingoa.com/neurons/switch.git'
+    },
+    'attributes': {
+        url: 'http://code.dianpingoa.com/neurons/attributes.git'
+    },
+    'clone': {
+        url: 'http://code.dianpingoa.com/neurons/clone.git'
+    },
+    'mix': {
+        url: 'http://code.dianpingoa.com/neurons/mix.git'
+    },
+    'asset': {
+        url: 'http://code.dianpingoa.com/neurons/asset.git'
+    },
+    'class': {
+        url: 'http://code.dianpingoa.com/neurons/class.git'
     }
 };
