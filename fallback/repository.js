@@ -6,9 +6,12 @@
 
 module.exports = {
     'mbox': {
-        'url': 'http://code.dianpingoa.com/neurons/mbox.git'
+        url: 'http://code.dianpingoa.com/neurons/mbox.git'
     },
     'css-rating': {
-        'url': 'http://code.dianpingoa.com/f2e/css-rating.git'
+        url: 'http://code.dianpingoa.com/f2e/css-rating.git'
+    },
+    'css-shop-tag': {
+        url: 'http://code.dianpingoa.com/f2e/css-shop-tag.git'
     }
 };
