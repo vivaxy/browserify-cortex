@@ -16,5 +16,8 @@ module.exports = {
     },
     'numeral-js': {
         url: 'http://code.dianpingoa.com/neurons/numeral-js.git'
+    },
+    'hexrgb': {
+        url: 'http://code.dianpingoa.com/neurons/hexrgb.git'
     }
 };
