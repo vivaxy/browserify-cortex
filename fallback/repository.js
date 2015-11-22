@@ -7,5 +7,8 @@
 module.exports = {
     'mbox': {
         'url': 'http://code.dianpingoa.com/neurons/mbox.git'
+    },
+    'css-rating': {
+        'url': 'http://code.dianpingoa.com/f2e/css-rating.git'
     }
 };
