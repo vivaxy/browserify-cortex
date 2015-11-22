@@ -13,5 +13,8 @@ module.exports = {
     },
     'css-shop-tag': {
         url: 'http://code.dianpingoa.com/f2e/css-shop-tag.git'
+    },
+    'numeral-js': {
+        url: 'http://code.dianpingoa.com/neurons/numeral-js.git'
     }
 };
