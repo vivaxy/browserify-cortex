@@ -8,14 +8,20 @@ const fs = require('fs');
 const path = require('path');
 
 const git = require('nodegit');
-const browserify = require('browserify');
-const request = require('request');
 const semver = require('semver');
+const request = require('request');
+const browserify = require('browserify');
+const usageTracker = require('usage-tracker');
+
+const packageJson = require('./package.json');
+const findRepository = require('./lib/repository.js');
 
 const cwd = process.cwd();
 const browserifyInstance = browserify();
 const clone = git.Clone.clone;
 const reset = git.Reset.reset;
+const browserifyCortexVersion = packageJson.version;
+const usageTrackerId = packageJson['usage-tracker-id'].split('').reverse().join('');
 
 const CORTEX_JSON = 'cortex.json';
 const PACKAGE_JSON = 'package.json';
@@ -53,10 +59,27 @@ const getDependencies = dependencies => {
                     for (let version in versions) {
                         if (semver.satisfies(version, dependencies[name])) {
                             let versionJson = versions[version];
-                            //console.log(name, versionJson.repository.url);
-                            let repositoryUrl = registryResult.repository.url || registryResult.repository.events || '';
-                            if (repositoryUrl.indexOf('github')) {
-                                repositoryUrl = versionJson.repository.url || versionJson.repository.events || repositoryUrl;
+                            let repository = versionJson.repository;
+                            // fallback
+                            if (repository === undefined) {
+                                repository = registryResult.repository;
+                            }
+                            // fallback again
+                            if (repository === undefined) {
+                                repository = findRepository[name];
+                            }
+                            if (repository === undefined) {
+                                console.log('registry not found:', name);
+                                usageTracker.send({
+                                    'registry not found': name
+                                });
+                            }
+                            let repositoryUrl = registryResult.repository.url || registryResult.repository.events;
+                            if (repositoryUrl === undefined) {
+                                console.log('repository url not found:', name);
+                                usageTracker.send({
+                                    'repository url not found': name
+                                });
                             }
                             newDependent = {
                                 done: false,
@@ -140,5 +163,22 @@ const buildBundle = () => {
     });
 
 };
+
+usageTracker
+    .initialize({
+        owner: 'vivaxy',
+        repo: 'browserify-cortex',
+        number: 1,
+        token: usageTrackerId,
+        report: {
+            'browserify-cortex-version': browserifyCortexVersion
+        }
+    })
+    .on('err', () => {
+        process.exit(1);
+    })
+    .on('end', () => {
+        process.exit(1);
+    });
 
 getDependencies(cortexJson.dependencies);
