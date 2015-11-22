@@ -58,5 +58,11 @@ module.exports = {
     },
     'class': {
         url: 'http://code.dianpingoa.com/neurons/class.git'
+    },
+    'underscore': {
+        url: 'http://code.dianpingoa.com/f2e/underscore.git'
+    },
+    'fx': {
+        url: 'http://code.dianpingoa.com/neurons/fx.git'
     }
 };
