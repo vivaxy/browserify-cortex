@@ -70,5 +70,8 @@ module.exports = {
     },
     'swfupload': {
         url: 'http://code.dianpingoa.com/neurons/swfupload.git'
+    },
+    'zepto': {
+        url: 'http://code.dianpingoa.com/f2e/zepto.git'
     }
 };

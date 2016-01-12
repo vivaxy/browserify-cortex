@@ -4,5 +4,6 @@
  */
 'use strict';
 module.exports = {
-    'switch': './index.js'
+    'switch': './index.js',
+    'zepto': './dest/index.js'
 };
