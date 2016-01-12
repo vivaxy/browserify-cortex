@@ -7,6 +7,5 @@
 
 'use strict';
 
-let app = require('./lib/application.js');
-
-app(false);
+let application = require('./lib/application.js');
+application(false);
