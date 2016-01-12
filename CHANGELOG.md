@@ -4,7 +4,7 @@
 
 - add changelog
 
--
+- add fallback report
 
 # 0.0.6
 
