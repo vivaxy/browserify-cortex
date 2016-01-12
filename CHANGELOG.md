@@ -1,3 +1,11 @@
+- add editor config
+
+- add eslint
+
+- add changelog
+
+-
+
 # 0.0.6
 
 - update version
