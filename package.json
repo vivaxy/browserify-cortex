@@ -28,6 +28,7 @@
     "cortex-profile": "^3.2.0",
     "log-util": "^1.1.1",
     "neuropil": "^7.0.2",
+    "semver": "^5.1.0",
     "usage-tracker": "^1.1.4"
   },
   "usage-tracker-id": "0f8ecf38612266db610a6b55587b94308ec14669",
