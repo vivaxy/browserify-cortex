@@ -12,5 +12,12 @@ bundle cortex project by browserify
 
 ```
 > cd some/cortex/project
-> browserify-cortex
+> bcortex
+```
+
+## specify output bundle name
+
+```
+> bcortex -n Hornet
+> bcortex --name Hornet
 ```
