@@ -72,7 +72,7 @@
         "no-unused-vars": 1,
         "no-use-before-define": 1,
         "callback-return": 1,
-        "global-require": 1,
+        "global-require": 0,
         "handle-callback-err": 2,
         "no-mixed-requires": 2,
         "no-new-require": 2,

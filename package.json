@@ -3,7 +3,7 @@
   "version": "0.0.7",
   "description": "bundle cortex project by browserify",
   "bin": {
-    "browserify-cortex": "./bin/client.js"
+    "bcortex": "./bin/client.js"
   },
   "engines": {
     "node": ">=4.0"
@@ -24,12 +24,13 @@
   },
   "homepage": "https://github.com/vivaxy/browserify-cortex#readme",
   "dependencies": {
-    "browserify": "^12.0.1",
+    "commander": "^2.9.0",
     "cortex-profile": "^3.2.0",
     "log-util": "^1.1.1",
     "neuropil": "^7.0.2",
     "semver": "^5.1.0",
-    "usage-tracker": "^1.1.4"
+    "usage-tracker": "^1.1.4",
+    "webpack": "^1.12.15"
   },
   "usage-tracker-id": "0f8ecf38612266db610a6b55587b94308ec14669",
   "devDependencies": {
