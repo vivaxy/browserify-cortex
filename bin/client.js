@@ -5,6 +5,8 @@
  * @author vivaxy
  */
 
+'use strict';
+
 let application = require('../lib/application.js');
 
 application();
