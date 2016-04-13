@@ -1,3 +1,15 @@
+# 0.0.9
+
+- use webpack instead of browserify as long as browserify runs into wrong entry name
+
+- use neuropil to download cortex repos instead of git clone, which brings a lot reliability
+
+# 0.0.8
+
+- fix bundle will not generate when cortex project has no dependencies
+
+# 0.0.7
+
 - add editor config
 
 - add eslint
