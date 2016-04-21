@@ -1,3 +1,11 @@
+# 0.1.0
+
+- bundle now saved to current directory
+
+- change `-n`, `--name` to `-o`, `--output`
+
+- add `-p`, `--project` option to set target project
+
 # 0.0.9
 
 - use webpack instead of browserify as long as browserify runs into wrong entry name

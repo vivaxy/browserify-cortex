@@ -28,6 +28,7 @@
     "cortex-profile": "^3.2.0",
     "log-util": "^1.1.1",
     "neuropil": "^7.0.2",
+    "request": "^2.72.0",
     "semver": "^5.1.0",
     "usage-tracker": "^1.1.4",
     "webpack": "^1.12.15"

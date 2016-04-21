@@ -15,9 +15,23 @@ bundle cortex project by browserify
 > bcortex
 ```
 
+## set bundle project
+
+if no version provided, the latest release version will be used
+
+```
+> bcortex -p hornet-hover
+> bcortex -p hornet-hover@1.0.0
+> bcortex --project hornet-hover
+```
+
 ## specify output bundle name
 
 ```
-> bcortex -n Hornet
-> bcortex --name Hornet
+> bcortex -o Hornet
+> bcortex --ouput Hornet
 ```
+
+# known issues
+
+- only bundles released project
